@@ -1,9 +1,10 @@
-from mycredentials import TOKEN, SHEET_URL, LIMPEZA_ID
-from telegram import Bot
 import requests
 import csv
+import json
 from io import StringIO
 from datetime import date
+from telegram import Bot
+from mycredentials import TOKEN, SHEET_URL, CHAT_ID
 
 class EEBot:
 
@@ -36,12 +37,15 @@ class EEBot:
 
 
 def main() -> None:
-
-    eebot = EEBot(SHEET_URL, TOKEN, LIMPEZA_ID)
+    eebot = EEBot(SHEET_URL, TOKEN, CHAT_ID)
     eebot.get_cleaning_sheet()
     eebot.send_today_workers()
 
 
-
-if __name__ == '__main__':
+def lambda_handler(event, context):
     main()
+    return {
+        'statusCode': 200,
+        'body': json.dumps('Sucess')
+    }
+
