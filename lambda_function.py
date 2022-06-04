@@ -49,12 +49,15 @@ class EEBot:
                                          self.cleaning_sheet[3][int(weekday /2)+5]]
 
     def make_today_message(self) -> None:
-        message = "Escala de hoje ({}/{})\n\n".format(self.today.day, self.today.month)
+        message = "Escala de hoje ({}/{}):\n\n".format(self.today.day, self.today.month)
         if self.today_trash_n_dishes:
             message += "Tirar lixo e guardar louça:\n{} e {}\n\n".format(*self.today_trash_n_dishes)
         else:
-            message += "Ninguém tira o lixo e guarda louça hoje :(\n\n"
-        message += "Escala semanal ({}/{}):\n\n".format(self.today.day, self.today.month)
+            message += "Ninguém tira o lixo nem guarda louça hoje :(\n\n"
+        first_weekday = self.today - timedelta(days=(self.today.weekday()+2)%7)
+        last_weekday = self.today - timedelta(days=(self.today.weekday()+2)%7-6)
+        message += "Escala semanal ({}/{} - {}/{}):\n\n".format(first_weekday.day, first_weekday.month,
+                                                                last_weekday.day, last_weekday.month)
         places = self.today_place_workers.keys()
         for place in places:
             message += "{}: {}\n".format(place, self.today_place_workers[place])
